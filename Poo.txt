@@ -1,0 +1,154 @@
+
+//Criando banco de dados:
+CREATE DATABASE Entregadores;
+
+-- Inserção dos dados na tabela
+INSERT INTO Controlar_os_pacotes 
+(código_de_rastreamento, data_de_recebimento, status, entregador, data_de_entrega)
+VALUES
+(1001, '2023-09-10', 'CONCLUÍDO', 'João Silva', '2023-09-10'),
+(1002, '2023-09-10', 'CONCLUÍDO', 'Ana Oliveira', '2023-09-10'),
+(1003, '2023-09-10', 'CONCLUÍDO', 'Pedro Santos', '2023-09-10'),
+(1004, '2023-09-10', 'CONCLUÍDO', 'Maria Costa', '2023-09-10'),
+(1005, '2023-09-10', 'CONCLUÍDO', 'Lucas Pereira', '2023-09-10'),
+(1006, '2023-09-10', 'CONCLUÍDO', 'Laura Rodrigues', '2023-09-10'),
+(1007, '2023-09-10', 'CONCLUÍDO', 'Gabriel Ferreira', '2023-09-10'),
+(1008, '2023-09-10', 'CONCLUÍDO', 'Sofia Almeida', '2023-09-10'),
+(1009, '2023-09-10', 'CONCLUÍDO', 'Mateus Gomes', '2023-09-10'),
+(1010, '2023-09-10', 'CONCLUÍDO', 'Luiza Martins', '2023-09-10'),
+(1011, '2023-09-10', 'CONCLUÍDO', 'Davi Sousa', '2023-09-10'),
+(1012, '2023-09-10', 'CONCLUÍDO', 'Clara Lima', '2023-09-10'),
+(1013, '2023-09-10', 'CONCLUÍDO', 'Enzo Carvalho', '2023-09-10'),
+(1014, '2023-09-10', 'CONCLUÍDO', 'Valentina Fernandes', '2023-09-10'),
+(1015, '2023-09-10', 'CONCLUÍDO', 'Bruno Rocha', '2023-09-10'),
+(1016, '2023-09-10', 'CONCLUÍDO', 'Yasmin Barbosa', '2023-09-10'),
+(1017, '2023-09-10', 'CONCLUÍDO', 'Lorenzo Teixeira', '2023-09-10'),
+(1018, '2023-09-10', 'CONCLUÍDO', 'Alice Miranda', '2023-09-10'),
+(1019, '2023-09-10', 'CONCLUÍDO', 'Theo Mendes', '2023-09-10'),
+(1020, '2023-09-10', 'CONCLUÍDO', 'Helena Nunes', '2023-09-10'),
+(1021, '2023-09-10', 'CONCLUÍDO', 'Miguel Oliveira', '2023-09-10'),
+(1022, '2023-09-10', 'CONCLUÍDO', 'Isabela Costa', '2023-09-11'),
+(1023, '2023-09-10', 'CONCLUÍDO', 'Lucas Rodrigues', '2023-09-16'),
+(1024, '2023-09-10', 'CONCLUÍDO', 'Giovanna Ferreira', '2023-09-16'),
+(1025, '2023-09-10', 'CONCLUÍDO', 'Henrique Almeida', '2023-09-16'),
+(1026, '2023-09-10', 'CONCLUÍDO', 'Beatriz Gomes', '2023-09-16'),
+(1027, '2023-09-10', 'PROCESSANDO', 'Samuel Martins', '2023-09-16'),
+(1028, '2023-09-10', 'PROCESSANDO', 'Lívia Sousa', '2023-09-16'),
+(1029, '2023-09-10', 'PROCESSANDO', 'Matheus Lima', '2023-09-16'),
+(1030, '2023-09-10', 'PROCESSANDO', 'Emily Carvalho', '2023-09-16'),
+(1031, '2023-09-10', 'PROCESSANDO', 'Cauã Fernandes', '2023-09-16'),
+(1032, '2023-09-15', 'CANCELADA', 'Lara Rocha', '2023-09-16'),
+(1033, '2023-09-15', 'CANCELADA', 'Arthur Barbosa', '2023-09-16'),
+(1034, '2023-09-15', 'CANCELADA', 'Elisa Teixeira', '2023-09-16'),
+(1035, '2023-09-15', 'CANCELADA', 'Bernardo Miranda', '2023-09-16'),
+(1036, '2023-09-15', 'CONCLUÍDO', 'Manuela Mendes', '2023-09-16'),
+(1037, '2023-09-15', 'CONCLUÍDO', 'Enzo Oliveira', '2023-09-16'),
+(1038, '2023-09-15', 'CONCLUÍDO', 'Mariana Costa', '2023-09-16'),
+(1039, '2023-09-15', 'CONCLUÍDO', 'Rafael Rodrigues', '2023-09-16'),
+(1040, '2023-09-15', 'CONCLUÍDO', 'Laura Ferreira', '2023-09-16');
+
+// VERIFICANDO SE OS DADOS FORAM INSERIDOS CORRETAMENTE//
+
+SHOW TABLES;
+
+SELECT * FROM Controlar_os_pacotes;
+
+// PASSO 2 CRIAÇÃO DO PROJETO NA IDE //
+
+// DEFININDO UMA ENTIDADE(classe) PARA OS DADOS //
+
+@Entity
+public class Package {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String codigoDeRastreamento;
+    private LocalDate dataDeRecebimento;
+    private String status;
+    private String entregador;
+    private LocalDate dataDeEntrega;
+
+    // getters e setters
+}
+
+// CRIANDO UM REST PARA RECEBER OS DADOS DO FORMULÁRIO //
+
+@RestController
+@RequestMapping("/api/packages")
+public class PackageController {
+
+    private final PackageRepository packageRepository;
+
+    public PackageController(PackageRepository packageRepository) {
+        this.packageRepository = packageRepository;
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> addPackage(@RequestBody Package newPackage) {
+        packageRepository.save(newPackage);
+        return ResponseEntity.ok("Pacote adicionado com sucesso!");
+    }
+}
+
+//CONECTANDO AO BANCO DE DADOS//
+
+# Configurações do banco de dados
+spring.datasource.url=jdbc:mysql://localhost:3306/Donaime_Entregadores
+spring.datasource.username=admin
+spring.datasource.password=1010
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=update
+
+
+// IMPORTANDO OS DADOS DO BANCO DE DADOS PARA A API REST //
+
+import java.time.LocalDate;
+
+public class Package {
+    private int codigoDeRastreamento;
+    private LocalDate dataDeRecebimento;
+    private String status;
+    private String entregador;
+    private LocalDate dataDeEntrega;
+
+    public int getCodigoDeRastreamento() {
+        return codigoDeRastreamento;
+    }
+
+    public void setCodigoDeRastreamento(int codigoDeRastreamento) {
+        this.codigoDeRastreamento = codigoDeRastreamento;
+    }
+
+    public LocalDate getDataDeRecebimento() {
+        return dataDeRecebimento;
+    }
+
+    public void setDataDeRecebimento(LocalDate dataDeRecebimento) {
+        this.dataDeRecebimento = dataDeRecebimento;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getEntregador() {
+        return entregador;
+    }
+
+    public void setEntregador(String entregador) {
+        this.entregador = entregador;
+    }
+
+    public LocalDate getDataDeEntrega() {
+        return dataDeEntrega;
+    }
+
+    public void setDataDeEntrega(LocalDate dataDeEntrega) {
+        this.dataDeEntrega = dataDeEntrega;
+    }
+}
